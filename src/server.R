@@ -26,25 +26,36 @@ windowsFonts(`quadrata`=windowsFont("Friz Quadrata Std"))
 shinyServer(function(input, output) {
   
   generate_DT <- function(data){
-    as.datatable(
+    dt = as.datatable(
       formattable(data,
                   list(
-                    atk = color_bar("#f8766d"),
-                    def = color_bar("#00ba38"),
-                    mag = color_bar("#619cff"),
-                    difficulty = color_bar("#6F6F6F")
+                    atk = color_tile("white","#f8766d"),
+                    def = color_tile("white","#00ba38"),
+                    mag = color_tile("white","#619cff"),
+                    difficulty = color_tile("white","#6F6F6F")
                   )), 
-      filter = "top", 
+      filter = list(position="top", clear = FALSE), 
       selection=list(
         mode="single",
         selected=c(1),
         target="row"), 
+      extensions = list("FixedHeader", "Responsive", 'Scroller'),
       options = list(
+        search = list(regex = TRUE, caseInsensitive = TRUE),
+        columnDefs = list(list(type="html-num-fmt", targets="[1,2,3,4]"),list(type="string", targets="0")),
         order = list(c(0, "asc")),
-        dom = "Bfrtip",
-        scrollX = TRUE
+        scrollX = TRUE,
+        scroller = TRUE,
+        deferRender = TRUE,
+        scrollY = 370,
+        dom="itn",
+        searchHighlight = TRUE,
+        pageLength = 1000, 
+        fixedHeader = TRUE
       ),
-      rownames=F) %>%
+      rownames=F) 
+    print(typeof(dt$atk))
+    dt %>%
       return()
   }
   ## TODO add tags filtering and name partial search
