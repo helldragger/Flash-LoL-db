@@ -17,531 +17,296 @@ library(lazyeval)
 library(janitor)
 library(plotly)
 library(formattable)
+require(mongolite)
+require(r2d3)
+require(extrafont)
+windowsFonts(`quadrata`=windowsFont("Friz Quadrata Std"))
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
   generate_DT <- function(data){
-    return(
-      datatable(
-        data,
-        selection = "none",  
-        filter = "top", 
-        options = list(
-            order = list(c(0, "asc")),
-            dom = "Bfrtip",
-            scrollX = TRUE
-          )
-        )
-      )
+    as.datatable(
+      formattable(data,
+                  list(
+                    atk = color_bar("#f8766d"),
+                    def = color_bar("#00ba38"),
+                    mag = color_bar("#619cff"),
+                    difficulty = color_bar("#6F6F6F")
+                  )), 
+      filter = "top", 
+      selection=list(
+        mode="single",
+        selected=c(1),
+        target="row"), 
+      options = list(
+        order = list(c(0, "asc")),
+        dom = "Bfrtip",
+        scrollX = TRUE
+      ),
+      rownames=F) %>%
+      return()
   }
+  ## TODO add tags filtering and name partial search
   
-  # 1.1) dataset loading
-  #loads the dataset
   df <- reactive({
-    if (is.null(input$dataset))
-      return(NULL);
-    df <- read.csv(input$dataset$datapath,
-                   header = input$dataset_header,
-                   sep = input$dataset_sep,
-                   quote = input$dataset_quote) %>% mutate_all(as.factor)
+    mongoCon <- mongo(db="Champions",
+                      collection = "fulldata",
+                      url=paste0("mongodb+srv://",USER,":",PASS,"@",URL),
+                      verbose=T);
+    
+    df <- mongoCon$find('{}') %>% 
+      select(image, name, title, info, lore, skins, tags ) %>% 
+      mutate(full = image$full, atk=info$attack, def=info$defense, mag=info$magic, difficulty=info$difficulty) %>% 
+      select(-image, -info)
     return(df)
   });
   
   
-  #displays the basic dataset preview
-  output$dataset_preview <- renderDataTable({
-    data <- df()
-    if (is.null(data)){
-      return(NULL)
-    }
-    if(input$dataset_disp == "head") {
-      return(generate_DT(head(data)))
-    }
-    else {
-      return(generate_DT(data))
-    }
-  });
   
-  ##### Projection
-  
-  
-  
-  ##### CLUSTERIZATION
-  
-  data.famd<-reactive({
-    return(FAMD(df(), graph=F))
-  })
-  
-  projectedData <- reactive({
-    return(df() %>% mutate(viz_x=as.numeric(data.famd()$ind$coord[,1]), viz_y=as.numeric(data.famd()$ind$coord[,2])))
-  })
-  
-  data.hcpc<-reactive({
-    if(!is.null(input$catVar) && input$catVar == "automatic"){
-      return(HCPC(data.famd(), graph = F, nb.clust = input$nbClusters))
-    }
-    return(NULL)
-  })
-  
-  clusterizedData<- reactive({
-    if (!is.null(input$catVar)){
-      data <- projectedData()
+  selected <- reactive({
+    if(input$HEROES == "TOUT"){
+      TOUT()[input$TOUT_rows_selected,]
       
-      if (input$catVar == "automatic"){
-        return( data %>% 
-            mutate(cluster_dat=data.hcpc()$data.clust$clust))
-      }else{
-        data.hcpc<-NULL
-        # specific var used.
-        return(data %>% 
-                 mutate(cluster_dat=as.factor( data[[input$catVar]] )) )
-      }
+    }else if(input$HEROES == "ASSASSINS"){
+      ASSASSINS()[input$ASSASSINS_rows_selected,]
+      
+    }else if(input$HEROES == "COMBATTANTS"){
+      COMBATTANTS()[input$COMBATTANTS_rows_selected,]
+      
+    }else if(input$HEROES == "MAGES"){
+      MAGES()[input$MAGES_rows_selected,]
+      
+    }else if(input$HEROES == "TIREURS"){
+      TIREURS()[input$TIREURS_rows_selected,]
+      
+    }else if(input$HEROES == "SUPPORTS"){
+      SUPPORTS()[input$SUPPORTS_rows_selected,]
+      
+    }else if(input$HEROES == "TANKS"){
+      TANKS()[input$TANKS_rows_selected,]
     }
   })
   
-  output$clusterInfo <- renderDT( {
-      
-      return(generate_DT(as.data.frame(data.hcpc()$desc.var$category[input$clusterInfoSelected])))
+  selectedFullData<- reactive({
+    if(nrow(selected()) != 0){
+      df() %>% filter(name == str_replace(selected()$name, ".png", ""))
+    }
   })
   
-  output$clusterInfoSelector <- renderUI({
-    if(is.null(data.hcpc())){
-      tags$h3("Only available in automatic mode.")
+  TOUT = reactive({ 
+    df() %>% 
+      select(name, atk, def, mag, difficulty)
+  }) 
+  
+  output$TOUT <- DT::renderDataTable({
+    TOUT() %>%
+      generate_DT()
+  })
+  
+  ASSASSINS = reactive({ 
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Assassin" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty)
+  }) 
+  
+  output$ASSASSINS <- DT::renderDataTable({
+    ASSASSINS() %>%
+      generate_DT()
+  })
+  
+  COMBATTANTS = reactive({ 
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Fighter" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty)
+  }) 
+  
+  output$COMBATTANTS <- DT::renderDataTable({
+    COMBATTANTS() %>%
+      generate_DT()
+  })
+  
+  MAGES = reactive({ 
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Mage" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty)
+  }) 
+  output$MAGES <- DT::renderDataTable({
+    MAGES() %>%
+      generate_DT()
+  })
+  
+  TIREURS = reactive({ 
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Marksman" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty) 
+  }) 
+  output$TIREURS <- DT::renderDataTable({
+    TIREURS() %>%
+      generate_DT()
+  })
+  
+  SUPPORTS = reactive({ 
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Support" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty)
+  }) 
+  
+  output$SUPPORTS <- DT::renderDataTable({
+    SUPPORTS() %>%
+      generate_DT()
+  })
+  
+  TANKS = reactive({
+    df() %>% 
+      filter(as.logical(lapply(tags, function(x){"Tank" %in% x}))) %>%
+      select(name, atk, def, mag, difficulty)
+  }) 
+  output$TANKS <- DT::renderDataTable({
+    TANKS() %>%
+      generate_DT()
+  })
+  
+  output$splash <- renderImage({
+    if(nrow(selected()) != 0){
+      champname = str_replace(selected()$name, ".png", "")
+      
+      version = selectedFullData() %>% .$skins %>% as.data.frame() %>% .$num %>% sample(1)
+      filename = paste(paste(champname, version, sep="_"),"jpg", sep=".")
+      
+      SRC = normalizePath(file.path('./assets/champion_splash', filename))
+      ALT = selectedFullData() %>% .$skins %>% as.data.frame() %>% filter(num == version) %>% .$name 
     }else{
-      selectInput("clusterInfoSelected", "Cluster: ", selected=1, choices=c(1:length(data.hcpc()$desc.var$category)))
+      SRC = normalizePath(file.path("./assets/banner.png"))
+      ALT = "League of Legends Database"
+    }
+    print("[EVENT] Changing splash")
+    print(paste("src: ",SRC))
+    print(paste("alt:",ALT))
+    result = list(src=SRC, alt=ALT)
+  }, deleteFile = FALSE)
+  
+  output$icon <- renderImage({
+    if(nrow(selected()) != 0){
+      SRC = normalizePath(file.path('./assets/champion_icon', paste0(selected()$name, ".png")))
+      ALT = selected()$name
+    }else{
+      SRC = ""
+      ALT = ""
+    }
+    print("[EVENT] Changing icon")
+    print(paste("src: ",SRC))
+    print(paste("alt:",ALT))
+    result = list(src=SRC, alt=ALT)
+  },
+  deleteFile = FALSE)
+  
+  output$loading <- renderImage({
+    if(nrow(selected()) != 0){
+      champname = str_replace(selected()$name, ".png", "")
+      
+      version = selectedFullData() %>% .$skins %>% as.data.frame() %>% .$num %>% sample(1)
+      filename = paste(paste(champname, version, sep="_"),"jpg", sep=".")
+      
+      SRC = normalizePath(file.path('./assets/champion_loading', filename))
+      ALT = selectedFullData() %>% .$skins %>% as.data.frame() %>% filter(num == version) %>% .$name 
+    }else{
+      SRC = ""
+      ALT = ""
+    }
+    print("[EVENT] Changing loading image")
+    print(paste("src: ",SRC))
+    print(paste("alt:",ALT))
+    result = list(src=SRC, alt=ALT)
+  },
+  deleteFile = FALSE)
+  
+  output$name <- renderUI({
+    data = selectedFullData()
+    if (is.null(data)){return()}
+    string = data %>% select(name)
+    if(nrow(string) != 0){
+      paste(string)
+    }else{
+      paste("Sélectionnez un héros en cliquant sur sa ligne pour afficher son profil")
     }
   })
   
-  
-  
-  output$clusteringMethodPreviewExplanation<- renderUI({
-    if(is.null(data.hcpc())){
-        tags$h3("Only available in automatic mode.")
-    }else{
-      selectInput("clusterInfoSelected", "Cluster: ", selected=1, choices=c(1:length(data.hcpc()$desc.var$category)))
+  output$title <- renderUI({
+    data = selectedFullData()
+    if (is.null(data)){return()}
+    string = data %>% select(title)
+    if(nrow(string) != 0){
+      paste(string)
     }
   })
   
+  output$desc <- renderUI({
+    data = selectedFullData()
+    if (is.null(data)){return()}
+    string = data %>% select(lore)
+    if(nrow(string) != 0){
+      paste(string)
+    }
+  })
   
-  output$catVarSetting<- renderUI({
-    choices <- c("automatic", colnames(df()))
-    selectInput("catVar", "Specific known groups used : ", selected =choices[1], choices = choices )
+  output$info <- renderPlot({
     
-  })
-  
-  
-  output$clusteringMethodPreview <- renderPlot({
-    if (is.null(clusterizedData()))
-      return();
+    df = selected() %>% 
+      select(atk, def, mag)
+    if(nrow(df) == 0){
+      return()
+    }
     
-    return(ggplot(clusterizedData(), 
-                  aes(x=viz_x, 
-                      y=viz_y, 
-                      color=cluster_dat,
-                      group=cluster_dat))+
-             geom_point()+
-             geom_encircle()+
-             theme_minimal())
-  })
-  
-  
-  output$clusteringMethodPreviewVariables <- renderPlot({
-    return(fviz_famd_var(data.famd(), choice="var", repel=T))
-  })
-  
-  output$clusteringMethodPreviewIndividuals <- renderPlot({
-    data <- as_tibble(clusterizedData())
-    # split the fdata for each cluster
-    split.data<- split(data, as.factor(data$cluster_dat))
-    # calculate the convex hull of each cluster 
-    applied.data <- lapply(split.data, function(df){ df[chull(df$viz_x, df$viz_y),] })
-    # combine the separated data into a single one,
-    combined.data <- do.call(rbind,applied.data)
-    plot <- ggplot(data=data, aes(x=viz_x, y=viz_y, color=cluster_dat, shape=cluster_dat))+
-      geom_polygon(data=combined.data,
-                   aes(x=viz_x, y=viz_y, fill=cluster_dat),
-                   alpha=0.5)+
-      geom_point()+
-      theme_minimal()
-    return(plot)
-  })
-  
-  ##### FILTERING
-  user_filter_error_message <- NULL;
-  filter_errored <- F;
-  output$user_filter_error<-renderUI({
-    if(filter_errored){
-      renderText("This filter is invalid:")
-      renderText(user_filter_error_message)
-    }else{
+    polygon = data.frame(x=c(0, -0.86/10*df$def, 0.86/10*df$mag),
+                         y=c(1/10*df$atk, -0.5/10*df$def, -0.5/10*df$mag),
+                         type=c("ATTAQUE", "DÉFENSE", "MAGIE"),
+                         value=c(df$atk, df$def, df$mag))
+    
+    scales = data.frame(x=c(1:10,1:10,1:10), y=c(1:10,1:10,1:10), type = c(rep.int("ATTAQUE", 10), rep.int("DÉFENSE", 10), rep.int("MAGIE", 10))) %>% 
+      mutate(x=ifelse(type == "ATTAQUE",0,ifelse(type=="DÉFENSE", -.86/10*x, .86/10*x)), 
+             y=ifelse(type == "ATTAQUE",1/10*y,ifelse(type=="DÉFENSE", -.5/10*y, -.5/10*y)))
+    
+    
+    polygons = data.frame(x=rep.int(0,40),y=rep.int(0,40), value=rep.int(0,40))
+    for (val in 0:5) {
+      val = val * 2
+      polygons[(3*val)+1:(3*val)+4,]$value = val  
+      # atk
+      polygons[(3*val)+1,]$x = 0  
+      polygons[(3*val)+1,]$y = 1/10*val  
+      # def
+      polygons[(3*val)+2,]$x = -.86/10*val
+      polygons[(3*val)+2,]$y = -.5/10*val  
+      # mag
+      polygons[(3*val)+3,]$x = .86/10*val  
+      polygons[(3*val)+3,]$y = -.5/10*val  
+      # atk again
+      polygons[(3*val)+4,]$x = 0  
+      polygons[(3*val)+4,]$y = 1/10*val  
       
     }
-  })
-  
-  user_filter <- reactive({
-    tryCatch({
-        print("INCLUSIVE FILTER: ")
-        print(input$userFilteringText)
-        return(input$userFilteringText)
-      },
-      error=function(e){
-        user_filter_error_message<-e
-        return("")
-      }
-    )
-  })
-  
-  df.unfiltered <- reactive({
-    print("calculating unfiltered df")
-    return(clusterizedData() %>% mutate_all(as.factor))  
-  })
-  
-  df.filtered <- reactive({
-    print("calculating filtered df")
-    tryCatch({
-      filt<- user_filter()
-      result <- df.unfiltered()
-      if (filt != "")
-      {
-        result %<>% filter_(filt)
-      }
-      print("Filtered df calculated")
-      
-      filter_errored <- F
-      showNotification("Updating filter...", duration = 1,  type="message")
-      return(result)
-    },
-    error=function(e){
-      print("ERROR: ")
-      print(e)
-      showNotification(paste0(e), type="error")
-      filter_errored <- T
-      print("Filtered df reverted to no filter")
-      return(df.unfiltered())
-    })
-  })
-  
-  output$filteringClustersPreview <- renderPlot({
-    print("updating filteringClusters preview...")
-    pair_filtering_viz(df.unfiltered(), df.filtered())+
-      coord_flip()
-  })
-  
-  output$filteredDT <- renderDT({
-    return(generate_DT(df.filtered()));
-  })
-  
-  
-  ##### MINING
-  
-  exploited.patterns <- reactiveVal()
-  
-  output$miningSettings<- renderUI({
-    box(width=6,
-        title="Mining settings",
-        sliderInput("support", "Support", min=0.05, max=1, value=c(0.2, 1), step=0.05),
-        sliderInput("minConfidence", "Minimum confidence", min=0, max=1, value=0.5, step=0.05),
-        sliderInput("len", "Pattern length ", min=1, max=length(colnames(df.filtered())), value=c(1,min(10, length(colnames(df.filtered())))), step=1),
-        selectInput("target", "Mining target", choices=c("maximally frequent itemsets", "rules", "hyperedgesets"), selected="rules"),
-        numericInput("maxTime", "Maximum Mining time (0 to disable)", value= 5, min = 0, step = 1),
-        actionButton("mining_start", "Launch mining >")
-        )
     
-  })
-  
-  
-  patterns <- eventReactive(input$mining_start, {
-    showNotification("Mining ongoing. Please wait...", type="message")
-    transactions <- as(df.filtered(), "transactions")
-    clusterItems <- grep("^cluster_dat=", itemLabels(transactions), value = TRUE)
-    rules <- unique(apriori(transactions, 
-                            parameter=list(support=input$support[1],
-                                           smax=input$support[2],
-                                           confidence=input$minConfidence,
-                                           minlen=as.numeric(input$len[1]),
-                                           maxlen=as.numeric(input$len[2]),
-                                           maxtime=as.numeric(input$maxTime)), 
-                            appearance = list(rhs=clusterItems)))
-    interest_rules<- interestMeasure(rules, c("jaccard", "chiSquared", "gini", "counterexample"), transactions=transactions)
-    result_rules<- cbind(DATAFRAME(rules),interest_rules)
-    ## filtering
     
-    switch (input$target,
-      "maximal rules" = {
-        result_rules%<>%filter(is.maximal(rules))
-      }#,
-      #"closed frequent itemsets" = {
-        #print("item set from rules:")
-        #itemSets<-generatingItemsets(rules)
-        #print(itemSets)
-        #print("size of 1 itemset: ")
-        #print(nitems(itemSets[1]))
-        #print("view of 1 itemset: ")
-        #summary(itemSets[1])
-        #result_rules%<>%filter(is.closed(new("itemsets", items=rules@lhs, quality=rules@quality )))
-      #}
-    )
-    exploited.patterns(rep(F, nrow(result_rules)))
-    return(result_rules)
-  })
-  
-  output$patternsAmountBox <- renderValueBox({
-    valueBox(nrow(patterns()), " patterns extracted")
-  })
-  
-  output$patternsExploredBox <- renderValueBox({
-    valueBox(paste0(nrow(patterns()%>%filter(exploited.patterns()))/nrow(patterns())*100, "%"), " patterns exploited")
-  })
-  
-  output$patternsClustersDistribution<- renderPlot({
-    return( ggplot(patterns(), aes(x=RHS, fill=RHS, color=RHS))+
-      geom_bar(position = "identity")+
-      theme_minimal()+
-        coord_flip())
-  })
-  
-  
-  
-  output$patternsOverview <- renderPlot({
-    #return(ggpairs(patterns()%>% select(-LHS),mapping = aes(binwidth=10,color=RHS, fill=RHS), lower = list(continuous="density", combo="facethist", discrete="facetbar")))
-  })
-  
-  ##### SAMPLING PARAMETERS
-  
-  samplerModel<- reactive({
-    return(sampler_models[[input$modelType]])
-  })
-  
-  modelPrecision <- "--"
-  
-  modelMode<- "--"
-  
-  output$samplingIterationBox<-renderValueBox({
-    valueBox(input$sample_patterns+1, " iteration")
-  })
-  output$samplingExploitationExplorationRatio<-renderValueBox({
-    valueBox(paste0(input$explorationRatio, "%"), " exploration ratio")
-  })
-  
-  output$modelCurrentType<-renderValueBox({
-    valueBox(input$modelType, " model")
-  })
-  output$modelCurrentMode<-renderValueBox({
-    valueBox(modelMode, " mode")
-  })
-  
-  output$modelPrecisionRating<-renderValueBox({
-    valueBox(paste0(modelPrecision,"%"), " accuracy")
-  })
-  
-  
-  
-  ##### PATTERN ANALYSIS
-  pattern.ranking <- reactiveVal(rep("--", 10))
-  
-  pattern.subset <- reactive({
-    input$sample_patterns
-    # SAMPLING TRAINING HERE
-    switch (input$sampling_model,
-            random={
-              
-              n_exploited <- sum(exploited.patterns())
-              if(n_exploited == 0) # first iteration only 
-                {
-                subset<- sample_n(patterns(), 10)
-              } else {
-                exploited_probability <- input$explorationRatio / 100
-                weights <- lapply(exploited.patterns(), function(exploited){if(exploited) return(exploited_probability) else return(1 - exploited_probability)})
-                subset<- sample_n(patterns(), 10, weight = weights)                
-              }
-              exploited.patterns(or(exploited.patterns(), which(patterns() %in% subset)))
-              pattern.ranking(rep("--", 10))
-              return(subset)
-            },
-            topn={
-              # TODO
-              # sort by the column orders
-              print("TOPN -> determining column orders")
-              # the dynamc arrangement is not ready
-              #order.expr <- input$orderExpr
-              # this works though
-              order.expr <- quos("lift, support, count, jaccard, chiSquared, gini, counterexample")
-              print("TOPN -> fetching exploration patterns")
-              print("TOPN -> exploited patterns:")
-              print(exploited.patterns())
-              exploration.patterns <- patterns()%>% 
-                filter(!exploited.patterns()) 
-              
-              print("TOPN -> fetching exploitation patterns")
-              exploitation.patterns <- patterns()%>% 
-                filter(exploited.patterns()) 
-
-              print("TOPN -> filtering 10 top values.")
-              
-              if (sum(exploited.patterns()) == 0){ # first iteration
-                subset <- exploration.patterns%>%
-                  arrange(!!!order.expr) %>%
-                  filter(row_number() <= 10)
-                print(nrow(subset))
-              }else{
-                exploRatio <- input$explorationRatio
-                explorAmount<- exploRatio/100*10
-                exploiAmount<- 10 - explorAmount
-                subset <- rbind(
-                  exploration.patterns%>%
-                    arrange(!!!order.expr) %>%
-                    filter(row_number() <= explorAmount),
-                  exploitation.patterns%>%
-                    arrange(!!!order.expr) %>%
-                    filter(row_number() <= exploiAmount)
-                )
-              }
-              print("TOPN -> subset calculated!")
-              print(subset)
-              print("TOPN -> new exploited patterns mask: ")
-              
-              # TODO UPDATE EXPLOITED PATTERNS
-              #exploited.patterns(or(exploited.patterns(), which(patterns() %in% (patterns() %>% all_equal(subset, ignore_row_order = T)))))
-              print(exploited.patterns())
-              pattern.ranking(rep("--", 10))
-              return(subset)
-            })
+    annotFamily = "quadrata"
     
-    return(samplerModel()$sample_patterns(patterns()))
-  })
-  
-  output$subsetDT<-renderDT({
-    input$dislikeButton
-    input$likeButton
-    input$notInterestingButton
-    input$interestingButton
-    print("SUBSETDT -> Getting values")
-    subset <-pattern.subset()
-    print("DT fetched :")
-    print(subset)
-    feedback <- pattern.ranking()
-    print("Feedback fetched :")
-    print(feedback)
+    p = polygon %>%
+      ggplot(aes(x=x, y=y))+
+      geom_polygon(data=polygons, aes(group=value),fill='transparent', color="gray70", size=0.3)+
+      annotate(geom="text", label="ATTAQUE", x=0, y=1, angle=-57,hjust=0, vjust=0, fontface="bold", color="gray65", size=7, family = annotFamily)+
+      annotate(geom="text", label="DEFENSE", x=-.86, y=-.5, angle=58, hjust=0, vjust=0, fontface="bold", color="gray65", size=7, family = annotFamily)+
+      annotate(geom="text", label="MAGIE", x=.86, y=-.5, vjust=0,hjust=1, fontface="bold", color="gray65", size=7, family = annotFamily)+
+      geom_polygon(fill='gray75', color="gray45", size=1.3)+
+      geom_segment(aes(x=0,y=0,xend=0,yend=1, color="ATTAQUE"))+
+      geom_segment(aes(x=0,y=0,xend=-.86,yend=-.5, color="DÉFENSE"))+
+      geom_segment(aes(x=0,y=0,xend=.86,yend=-.5, color="MAGIE"))+
+      geom_point(data=scales, aes(x=x, y=y, color=type))+
+      geom_point(aes(x=x, y=y, color=type))+
+      geom_label(aes(color=type, label=value))+
+      theme_void()+
+      guides(color=F)
     
-    print("SUBSETDT -> merging values")
-    df<- cbind(list(feedback=feedback), subset)
-    print(df)
-    print("SUBSETDT -> DF ASSEMBLED")
-    df %<>% mutate_if(is.numeric, function(x){digits(x,2)})
-    print("SUBSETDT -> Numerical values coerced.")
-    dt<-as.datatable(
-      formattable(df,
-        list(
-          jaccard= color_bar("lightgray"),
-          count= color_bar("lightgray"),
-          lift= color_bar("lightgray"),
-          confidence= color_bar("lightgray"),
-          chiSquared= color_bar("lightgray"),
-          gini= color_bar("lightgray"),
-          counterexample= color_bar("lightgray"),
-          support= color_bar("lightgray")
-          )
-        ), 
-      selection="multiple",  
-      filter = "top",
-      options = list(
-        dom = "t",
-        scrollX = TRUE
-      )
-    ) 
-    print("SUBSETDT -> DT created")
-    return(dt)
-  })
-  
-  
-  patterns_selected <- reactive({
-    print("SELECTED -> GETTING CURRENT SUBSET")
-    res <- pattern.subset() %>% mutate(selected=F)
-    print("SELECTED -> CHECKING HIDDEN ROWS")
-    if(!is.null(input$subsetDT_rows_all)){
-      res<- res[input$subsetDT_rows_all,] 
-    }
-    print("SELECTED -> CHECKING ALREADY SELECTED ROWS")
-    if(!is.null(input$subsetDT_rows_selected)){
-      res[input$subsetDT_rows_selected,]$selected <- T
-    }
-    print("SELECTED -> READY")
-    return(res)
-  })
-
-  
-  observeEvent(input$dislikeButton,{
-    pattern.ranking(
-      mapply(
-        function(selected, current_val){
-          if (selected)
-            return("Disliked")
-          else
-            return(current_val)
-        },
-        patterns_selected()$selected,
-        pattern.ranking()
-      )
-    )
-    })
-
-  observeEvent(input$likeButton,{
-    pattern.ranking(
-      mapply(
-        function(selected, current_val){
-          if (selected)
-            return("Liked")
-          else
-            return(current_val)
-        },
-        patterns_selected()$selected,
-        pattern.ranking()
-      )
-    )
-    })
-
-  observeEvent(input$interestingButton,{
-    pattern.ranking(
-      mapply(
-        function(selected, current_val){
-          if (selected)
-            return("Interested")
-          else
-            return(current_val)
-        },
-        patterns_selected()$selected,
-        pattern.ranking()
-      )
-    )
-    })
-
-  observeEvent(input$notInterestingButton,{
-    pattern.ranking(
-      mapply(
-        function(selected, current_val){
-          if (selected)
-            return("Not interested")
-          else
-            return(current_val)
-        },
-        patterns_selected()$selected,
-        pattern.ranking()
-      )
-    )
-  })
-  
-  
-  ##### plots
-  
-  
-  
-  
-  ##### ANALYSTICS
-  
-  
-  ##
-  
-  
-  
-  
+    p
+    
+  }, bg="transparent")
 })

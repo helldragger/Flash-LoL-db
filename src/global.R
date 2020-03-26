@@ -18,7 +18,9 @@ library(ggalt)
 library(ggfortify)
 library(tibble)
 options(shiny.reactlog=TRUE) 
-
+USER <- "loladmin"
+PASS <- "jeanDB"
+URL <- "loldb-9slby.mongodb.net"
 clustering_methods<- list(
   # a clustering method contains:
   # a clusterize method taking as input >
