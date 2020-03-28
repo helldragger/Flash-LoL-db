@@ -102,7 +102,7 @@
         function insertMenu(root, filter) {
         		document.getElementsByClassName("list_champ")[0].innerHTML='';
         		postList = ["All","Assassin","Fighter","Mage","Marksman","Support","Tank"];
-
+        		
                 //"use strict";
                 //var json = JSON.parse(root);
                 //console.log("root", root);
@@ -217,6 +217,7 @@
                 	node.setAttribute("id", root.items[i].id);
                 	node.setAttribute("class", "nameChamp");
                 	document.getElementsByClassName("list_champ")[0].appendChild(node);
+                	search();
                 }
             }
         	//var io = require('socket.io').listen(app.listen(8080), {log: true});
