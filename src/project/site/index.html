@@ -8,7 +8,6 @@
         <script>
         	
         	function ul(index) {
-        		console.log('click!' + index)
 	
         		var underlines = document.querySelectorAll(".underline");
         		var anode = document.querySelectorAll("a");
@@ -22,9 +21,9 @@
         		for (var i = 0; i < underlines.length; i++) {
         			underlines[i].style.width = size+1;
         			underlines[i].style.transform = 'translate3d(' + total + 'px,0,0)';
-
-        			//underlines[i].style.transform = 'translate3d(' + total + index * 100 + '%,0,0)';
         		}
+        		
+        		insertMenu(cast, index);
         	}
         </script>
         <link type="text/css" href="css/style.css" rel="stylesheet"/>
@@ -84,13 +83,20 @@
         </footer>
 
         <script>
-        function insertMenu(root) {
-                "use strict";
+        
+        function insertMenu(root, filter) {
+        		document.getElementsByClassName("list_champ")[0].innerHTML='';
+        		postList = ["All","Assassin","Fighter","Mage","Marksman","Support","Tank"];
+
+                //"use strict";
                 //var json = JSON.parse(root);
-                console.log("root", root);
+                //console.log("root", root);
                 console.log("items", root.items);
-                console.log("champion name", root.items[0].name);
+                //console.log("champion name", root.items[0].name);
                 for (let i = 0; i < root.items.length; i++){
+                	if (filter > 0 && root.items[i].tags[0] != postList[filter]){
+                		continue
+                	}
 					var node = document.createElement("div");
 					node.onclick = ()=>{
 						var s = io.connect('http://localhost:8080');
@@ -202,22 +208,23 @@
         	//var io = require('socket.io').listen(8080);
         	var s = io.connect('http://localhost:8080');
         	s.emit('ready', function(data){
-        			console.log(data);
+        			console.log("info", data);
         	});
+
         	var cast;
-        	s.on('data', (data) =>{
-        			console.log(data);
-        			var e = document.getElementById("menu");
-        			insertMenu(data);
-        			ul(0);
-        			//e.innerHTML = data;
-        	});
+			s.on('data', (data) =>{
+				console.log(data);
+				cast=data;
+				//insertMenu(data, 0);
+				ul(0);
+			});
+			
 
 			s.on("details", (data)=>{
 				console.log("details",data.name)
 				var e = document.getElementById("details");
 				
-			})
+			});
 
         </script>
     </body>
