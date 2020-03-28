@@ -65,13 +65,13 @@ body{
 	font-size: 14px;
 	z-index: 14;
 	color:black;
-	transition-duration: 200ms;
+	transition-duration: 300ms;
 	transition-property: color;
 }
 
 .menuLol:hover {
 	color:#d98200;
-	transition-duration: 200ms;
+	transition-duration: 300ms;
 	transition-property: color;
 }
 
