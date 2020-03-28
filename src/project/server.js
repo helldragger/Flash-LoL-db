@@ -13,14 +13,14 @@ const client = new MongoClient(url_DB);
 // -------  Partie 1 -------
 
 
-const findDocuments = function(db, col, callback) {
+const findDocuments = function(db, col, query, callback) {
   // Get the documents collection
   const collection = db.collection(col);
   // Find some documents
-    collection.find({}).toArray(function(err, docs) {
+    collection.find(query).toArray(function(err, docs) {
 	assert.equal(err, null);
-	console.log("Found the following records");
-	console.log(docs)
+	//console.log("Found the following records");
+	//console.log(docs)
 	callback(docs);
   });
 }
@@ -30,8 +30,8 @@ client.connect(function(err) {
     assert.equal(err, null);
     console.log("Connected correctly to server");
     const db = client.db(dbName);
-    findDocuments(db, 'fulldata', function(data){
-	console.log('data', data);
+    findDocuments(db, 'fulldata', {},function(data){
+	//console.log('data', data);
     });
 });
 
@@ -76,15 +76,22 @@ var io = require('socket.io').listen(app.listen(port), {log: true});
 io.sockets.on('connection', function(socket) {
     socket.on('ready', function(data) {
         console.log('received', 'ack');
-	const db = client.db(dbName);
-	findDocuments(db, 'fulldata', function(docs){
-        	var champ = {"items" : docs};
-		socket.emit("data", champ);
-	});
-    });
-        socket.on('sent', function(data) {
-            console.log('received', data);
-            socket.emit("message", data);
-
+        const db = client.db(dbName);
+        findDocuments(db, 'fulldata', {}, function(docs){
+                var champ = {"items" : docs};
+            socket.emit("data", champ);
         });
+    });
+    socket.on('sent', function(data) {
+        console.log('received', data);
+        socket.emit("message", data);
+    });
+    socket.on('selected', function(data) {
+        console.log('received', data);
+        const db = client.db(dbName);
+        findDocuments(db, 'fulldata', {"name":data.name}, function(doc){
+            console.log("found",doc[0].name);
+            socket.emit("details", doc);
+        });
+    });
 });
