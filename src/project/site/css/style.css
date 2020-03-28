@@ -41,9 +41,77 @@ body{
 	font-family: "font lol";
 }
 
-.title{
-	background: url('../img/select.png') center center no-repeat;
-	height: 150px;
+.underline {	
+	display: block;
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+
+	background: #FFD700;
+	pointer-events: none;
+	mix-blend-mode: multiply;
+	transition: width 0.75s, transform 0.5s ease-in-out;
+}
+
+.menuLol {
+	position: relative;
+	display: inline-block;
+	padding: 10px 0;
+	margin-left: 15px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 14px;
+	z-index: 14;
+}
+
+.inputsrch{
+	float: right;
+	position: relative;
+	top: -3px;
+	right: 50px;
+	display: inline-block;
+	padding: 5px 0;
+	font-size: 14px;
+	z-index: 14;
+	background: #e0e0e0;
+	border: none;
+	border-bottom: 1px solid gray;
+}
+
+.imgsrch{
+	float: right;
+	position: relative;
+	top: 0;
+	right: -145px;
+	display: inline-block;
+	z-index: 14;
+	cursor: pointer;
+
+}
+
+.navLol {
+	position: relative;
+	white-space: nowrap;
+	background: transparent;
+	padding: 3px 0;
+	margin: 30px;
+	
+	
+	margin-left:auto;
+	margin-right:auto;
+	width: 840px;
+}
+
+.navLol:after{
+	position: absolute;
+	content: ' ';
+	left: 5px;
+	bottom: 0;
+	border: 1px solid gray;
+	width: 98.5%;
+	height: 45px;
 }
 
 .list_content{
@@ -55,7 +123,6 @@ body{
 	padding: 20px 0;
 	background-color: #d9d9d9;
 	box-sizing: border-box;
-	
 }
 
 .list_content:before{
@@ -87,6 +154,15 @@ body{
 
 .list_champ{
 
+}
+
+.filtreLol{
+	display:block;
+}
+
+.title{
+	background: url('../img/select.png') center center no-repeat;
+	height: 150px;
 }
 
 .imgChamp{

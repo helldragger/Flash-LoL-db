@@ -4,6 +4,28 @@
         <title>XML/NodeJS framework - Index</title>
         <script src="d3/d3.min.js"></script>
         <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script>
+        	
+        	function ul(index) {
+        		console.log('click!' + index)
+	
+        		var underlines = document.querySelectorAll(".underline");
+        		var anode = document.querySelectorAll("a");
+        		var size = anode[index].offsetWidth;
+        		
+        		var total=15;
+        		for (var i = 0; i < index; i++){
+        			total+=anode[i].offsetWidth + parseInt(getComputedStyle(anode[i]).marginLeft)+4;
+        		}
+
+        		for (var i = 0; i < underlines.length; i++) {
+        			underlines[i].style.width = size+1;
+        			underlines[i].style.transform = 'translate3d(' + total + 'px,0,0)';
+
+        			//underlines[i].style.transform = 'translate3d(' + total + index * 100 + '%,0,0)';
+        		}
+        	}
+        </script>
         <link type="text/css" href="css/style.css" rel="stylesheet"/>
     </head>
     <body>
@@ -13,11 +35,23 @@
             </menu>
         </header>
         <section id="content">
-        	<nav>
-        		<canvas class="canves" width="500" height="52" style="width: 500; height: 52px; left: -2px; top: -2px"></canvas>
-        	</nav>
         	<div class="list_content">
-        	    <div class="title"></div>
+        		<div class="title"></div>				
+				<nav class="navLol">
+					<div class="borderNav"></div>
+					<div class="underline"></div>
+					<div class="underline"></div>
+					<div class="underline"></div>
+					<a class="menuLOL" onclick="ul(0)">Tout</a>
+					<a class="menuLOL" onclick="ul(1)">Assassins</a>
+					<a class="menuLOL" onclick="ul(2)">Combattants</a>
+					<a class="menuLOL" onclick="ul(3)">Mages</a>
+					<a class="menuLOL" onclick="ul(4)">Tireurs</a>
+					<a class="menuLOL" onclick="ul(5)">Supports</a>
+					<a class="menuLOL" onclick="ul(6)">Tanks</a>
+					<input class="inputsrch" type="text" placeholder="Rechercher">
+					<img class="imgsrch" src="img/search.png"/>
+				</nav>
         		<div class="list_champ"></div>
         	</div>
         </section>
@@ -66,8 +100,10 @@
         			console.log(data);
         			var e = document.getElementById("menu");
         			insertMenu(data);
+        			ul(0);
         			//e.innerHTML = data;
-        			});
+        	});
+
         </script>
     </body>
 </html>

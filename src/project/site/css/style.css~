@@ -1,65 +1,218 @@
-.box {
-    height: 1.1em;
-    display: table;
-    width: 400px;
-}
-
-#content {
-    float: none;
-}
-
-.menu {
-    float: left;
-    padding: 1em 2em;
-    text-decoration: none;
-    background: #111;
-}
-
-menu a{
-    background-color: #00933C;
-    color: whitesmoke;
-    padding: 0.2em;
-}
-
-a{
-    text-decoration: none;
-}
-
-body{
-    color: #111;
-    font-family: cursive
-}
-
-a{
-    color: darkolivegreen;
+@font-face{
+	font-family: "font lol";
+	src: url('lol.ttf');
 }
 
 header{
-    position: absolute;
-    top: 1em;
+    background: url('../img/lol-logo.png') no-repeat center center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -10px;
+	margin-bottom: 15px;
+	padding-top: 10px;
+	height: 200px;
 }
 
-footer{
-    position: absolute;
-    top: 0em;
-    font-size: small;
+header:before{
+	content: ' ';
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: -1;
+	background: url('../img/fond.png') center center;
+	background-size: 100% 100%;
+	filter: blur(5px);
+	/*box-shadow: inset 10px 40px 40px #061c25;*/
+	/*box-shadow: inset 0px -200px 60px -80px #061c25;*/
+	box-shadow: inset 0px -30px 25px 10px #061c25;
 }
 
-section #d3-content{
-    position: absolute;
-    top: 6em;
-    padding: 2em;
-    width: 36em;
+body{
+    background: #061c25 no-repeat center center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -10px;
+	margin-bottom: 15px;
+	padding-top: 10px;
+	height: 200px;
+	
+	font-family: "font lol";
 }
 
-.author-name{
-    font-size: small;
-    display: table-cell;
+.underline {	
+	display: block;
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+
+	background: #FFD700;
+	pointer-events: none;
+	mix-blend-mode: multiply;
+	transition: width 0.75s, transform 0.5s ease-in-out;
 }
-.author-attribute{
-    float: right;
-    background-color: #00933C;
-    text-align: right;
-    color: whitesmoke;
-    font-size: small;
+
+.menuLol {
+	position: relative;
+	display: inline-block;
+	z-index: 10;
+	padding: 10px 0;
+	margin-left: 15px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 14px;
+	z-index: 14;
+}
+
+.navLol {
+	position: relative;
+	white-space: nowrap;
+	background: transparent;
+	padding: 3px 0;
+	margin: 30px;
+	
+	
+	margin-left:auto;
+	margin-right:auto;
+	width: 840px;
+}
+
+.navLol:after{
+	position: absolute;
+	content: ' ';
+	left: 5px;
+	bottom: 4px;
+	top: 5px;
+	border: 1px solid gray;
+	width: 100%;
+}
+
+.list_content{
+	position: relative;
+	
+	width: 845px;
+	margin: 0 auto;
+	margin-bottom: 300px;
+	padding: 20px 0;
+	background-color: #d9d9d9;
+	box-sizing: border-box;
+}
+
+.list_content:before{
+	content: ' ';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	filter: blur(15px);
+	z-index: -2;
+}
+
+.list_content:after{
+	content: ' ';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	filter: blur(15px);
+	z-index: -1;
+}
+
+.list_content:before,
+.list_content:after{
+	background: linear-gradient(15deg, #00bcd4, #2E8B57, #00bcd4);
+}
+
+.list_champ{
+
+}
+
+.filtreLol{
+	display:block;
+}
+
+.title{
+	background: url('../img/select.png') center center no-repeat;
+	height: 150px;
+}
+
+.imgChamp{
+	width: 150px;
+	height: 250px;
+	transition: transform 0.5s;
+}
+
+.effect_list{
+	content: " ";
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 11%;
+	padding-top: 11%;
+	background-color: #d9d9d9;
+	transform: translate(50%, -50%) rotate(45deg);
+	transition: visibility 0.15s 0s, opacity 0.2s 0.2s, transform 0.5s ease 0s;
+}
+
+.nameChamp:hover{
+	cursor: pointer;
+}
+
+.nameChamp:hover > .effect_list{
+	transform: translate(150%, -150%);
+	visibility: hidden;
+	opacity: 0;
+}
+
+.nameChamp:hover > .imgChamp{
+	transform: scale(0.9, 0.9);
+}
+
+.nameChamp:hover > .textChamp{
+	transform: scale(0.9, 0.9);
+	margin-top: -15px;
+	background-color: #135D68;
+}
+
+.nameChamp{
+	position: relative;
+	display: inline-block;
+	margin-left: 15px;
+	margin-bottom: 15px;
+	width: 150px;
+	vertical-align: top;
+	overflow: hidden;
+}
+
+.textChamp{
+	text-align: center;
+	display: block;
+	color: #F0E68C;
+	background-color: #061c25;
+	margin-top: -5px;
+	padding: 6%;
+	transition: transform 0.5s, margin-top 0.4s, background-color 0.2s;
+}
+
+.nameChamp:after{
+	content: '';
+	position: absolute;
+	top: 237px;
+	left: -165px;
+	width: 20px;
+	height: 29px;
+	background: linear-gradient(90deg, transparent, rgba(240,230,140,0.8), transparent);
+	transform: skewX(35deg);
+	transition: 0s;
+}
+
+.nameChamp:hover:after{
+	left: calc(100% + 165px);
+	transition: 0.5s;
+	transition-delay: 0.2s;
 }
