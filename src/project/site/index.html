@@ -49,7 +49,7 @@
 					<a class="menuLOL" onclick="ul(4)">Tireurs</a>
 					<a class="menuLOL" onclick="ul(5)">Supports</a>
 					<a class="menuLOL" onclick="ul(6)">Tanks</a>
-					<input class="inputsrch" type="text" placeholder="Rechercher">
+					<input class="inputsrch" type="text" placeholder="Rechercher" onkeyup="search()">
 					<img class="imgsrch" src="img/search.png"/>
 				</nav>
         		<div class="list_champ"></div>
@@ -83,6 +83,21 @@
         </footer>
 
         <script>
+        
+        function search(){
+        	var input = document.getElementsByClassName("inputsrch")[0].value.toLowerCase();
+        	var listChamp = document.getElementsByClassName("list_champ")[0].childNodes;
+        	
+        	for (let i = 0; i < listChamp.length; i++){
+        		nameChamp = listChamp[i].id.toLowerCase();
+        		if (nameChamp.indexOf(input) !== -1){
+        			listChamp[i].style.display = "inline-block";
+        		} else {
+        			listChamp[i].style.display = "none";
+        		}
+        	}
+        }
+        
         
         function insertMenu(root, filter) {
         		document.getElementsByClassName("list_champ")[0].innerHTML='';
