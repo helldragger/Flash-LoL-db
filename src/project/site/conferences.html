@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>XML/NodeJS framework - Conferences</title>
+        <script src="d3/d3.min.js"></script>
+        <link type="text/css" href="css/style.css" rel="stylesheet"/>
+     </head>
+    <body>
+        <header>
+            <menu>
+                <div id="menu"></div>
+            </menu>
+        </header>
+        <section id="content">
+            <div id="d3-content"></div>
+            <div id="nconf"></div>
+        </section>
+        <footer>
+        </footer>
+
+        <script>
+            //-----------------------------------------
+            function insertConferenceNames(root) {
+                console.log("root", root);
+                console.log("conferences", root.conferences);
+                var insert = d3.selectAll("#d3-content").selectAll("div");
+                var conferences = insert.data(root.conferences.conferences).enter();
+                conferences.append("div")
+                        .attr("class", "box")
+                        .append("div")
+                        .text(function(d) {
+                    return d.name + '-' + d.value;
+                });
+            }
+            //-----------------------------------------
+            function insertMenu(root) {
+                "use strict";
+                console.log("root", root);
+                console.log("items", root.items);
+                var insert = d3.selectAll("#menu").selectAll("div");
+                var menu = insert.data(root.items).enter();
+                menu.append("div")
+                        .attr("class", "menu")
+                        .append("a")
+                        .attr("href", function (d) {
+                            return d.name + ".html";
+                        })
+                        .text(function (d) {
+                            return d.label
+                        });
+            }
+            d3.json("json/menu.json", insertMenu);
+            d3.json("json/graph.json", insertConferenceNames);
+        </script>
+    </body>
+</html>
+

@@ -1,0 +1,20 @@
+{
+    "items": [
+        {
+            "name": "index",
+            "label": "Accueil"
+        },
+        {
+            "name": "authors",
+            "label": "Auteurs"
+        },
+        {
+            "name": "conferences",
+            "label": "Conférences"
+        },
+        {
+            "name": "graph",
+            "label": "Graph"
+        }
+    ]
+}

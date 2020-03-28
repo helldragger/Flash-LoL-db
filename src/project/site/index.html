@@ -1,0 +1,74 @@
+<html >
+    <head>
+        <meta charset="UTF-8"> 
+        <title>XML/NodeJS framework - Index</title>
+        <script src="d3/d3.min.js"></script>
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <link type="text/css" href="css/style.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <header>
+            <menu>
+                <div id="menu"></div>
+            </menu>
+        </header>
+        <section id="content">
+        	<nav>
+        		<canvas class="canves" width="500" height="52" style="width: 500; height: 52px; left: -2px; top: -2px"></canvas>
+        	</nav>
+        	<div class="list_content">
+        	    <div class="title"></div>
+        		<div class="list_champ"></div>
+        	</div>
+        </section>
+        <footer>
+        </footer>
+
+        <script>
+        function insertMenu(root) {
+                "use strict";
+                //var json = JSON.parse(root);
+                console.log("root", root);
+                console.log("items", root.items);
+                console.log("champion name", root.items[0].name);
+                for (let i = 0; i < root.items.length; i++){
+                	var node = document.createElement("div");
+                	
+                	var textnode = document.createElement("p");
+                	textnode.innerHTML = root.items[i].name;
+                	
+                	var effect = document.createElement("span");
+                	effect.setAttribute("class", "effect_list");
+                	
+                	var imgnode = document.createElement("img");
+                	imgnode.setAttribute("src", "img/champion_loading/"+root.items[i].id+"_0.jpg");
+                	
+                	textnode.setAttribute("class", "textChamp");
+                	
+                	imgnode.setAttribute("class", "imgChamp");
+                	
+                	node.appendChild(imgnode);
+                	node.appendChild(effect);
+                	node.appendChild(textnode);
+                	node.setAttribute("id", root.items[i].id);
+                	node.setAttribute("class", "nameChamp");
+                	document.getElementsByClassName("list_champ")[0].appendChild(node);
+                }
+            }
+        	//var io = require('socket.io').listen(app.listen(8080), {log: true});
+        	//var io = require('socket.io').listen(8080);
+        	var s = io.connect('http://localhost:8080');
+        	s.emit('ready', function(data){
+        			console.log(data);
+        	});
+        	var cast;
+        	s.on('data', (data) =>{
+        			console.log(data);
+        			var e = document.getElementById("menu");
+        			insertMenu(data);
+        			//e.innerHTML = data;
+        			});
+        </script>
+    </body>
+</html>
+

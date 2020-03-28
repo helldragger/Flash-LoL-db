@@ -1,0 +1,57 @@
+<html >
+    <head>
+        <meta charset="UTF-8"> 
+        <title>XML/NodeJS framework - Index</title>
+        <script src="d3/d3.min.js"></script>
+        <link type="text/css" href="css/style.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <header>
+            <menu>
+                <div id="menu"></div>
+            </menu>
+        </header>
+        <section id="content">
+            <div id="d3-content">
+                <p>Pr&eacute;sentation de donn&eacute;es de 
+                    bibliographie&nbsp;: des auteurs publient conjointement 
+                    &agrave; des conf&eacute;rences. </p>
+                <p>On cherche &agrave; rendre 
+                    l'information visuellement attractive.</p>
+                <p>Ce framework devrait combiner&nbsp;:</p>
+                <ul><li>une base de donn&eacute;es non traditionnelle fournissant du JSON</li>
+                    <li>un serveur Nodejs avec socket.io pour servir les données</li>
+                    <li>une visualisation de donn&eacute;es générée côté client avec D3.js</li>
+                </ul>
+                <p>Dans cette version, les données sont des fichiers JSON 
+                    statiques hébergés sur le serveur&nbsp: plus besoin de serveur
+                    Nodejs ni de gestionnaire de base de données.</p>
+            </div>
+            <div id="nconf"></div>
+        </section>
+        <footer>
+        </footer>
+
+        <script>
+            function insertMenu(root) {
+                "use strict";
+                console.log("root", root);
+                console.log("items", root.items);
+                var insert = d3.selectAll("#menu").selectAll("div");
+                var menu = insert.data(root.items).enter();
+                menu.append("div")
+                        .attr("class", "menu")
+                        .append("a")
+                        .attr("href", function (d) {
+                            return d.name + ".html";
+                        })
+                        .text(function (d) {
+                            return d.label
+                        });
+            }
+
+            d3.json("json/menu.json", insertMenu)
+        </script>
+    </body>
+</html>
+

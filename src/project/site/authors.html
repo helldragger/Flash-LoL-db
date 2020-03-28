@@ -1,0 +1,111 @@
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>XML/NodeJS framework - Index</title>
+        <script src="d3/d3.min.js"></script>
+        <link type="text/css" href="css/style.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <header>
+            <menu>
+                <div id="menu"></div>
+            </menu>
+        </header>
+        <section id="content">
+            <div id="d3-content"></div>
+            <div id="nconf"></div>
+        </section>
+        <footer>
+        </footer>
+
+        <script>
+            //-----------------------------------------
+            function insertAuthorNames(root) {
+                console.log("root", root);
+                console.log("root", root.vertices);
+                var insert = d3.selectAll("#d3-content").selectAll("div");
+                var authors = insert.data(root.vertices).enter();
+                authors.append("div")
+                        .attr("class", "box")
+                        .append("div")
+                        .attr("class", "author-name")
+                        .attr("id", function (d) {
+                            return "authorId-" + d.id;
+                        })
+                        .on('mouseover.tooltip', function (d) {
+                            d3.select("#authorId-" + d.id + " text").remove();
+                            d3.select('#authorId-' + d.id)
+                                    .append('text')
+                                    .attr('class', 'name-rollover')
+                                    .text('  --> ' + d.attribute + " conf.")
+                                    .transition()
+                                    .style('opacity', 0)
+                                    .duration(500)
+                                    .style('opacity', '100%')
+                                    ;
+                        })
+                        .on('mouseout.tooltip', function (d) {
+                            d3.select("#authorId-" + d.id + " text")
+                                    .transition()
+                                    .duration(500)
+                                    .style('opacity', 0)
+                                    .remove();
+                        })
+                        .text(function (d) {
+                            return d.name;
+                        });
+
+                // attribut des auteurs
+                d3.selectAll('.box')
+                        .append('div')
+                        .style("width", function (d) {
+                            return (d.attribute / 2) + "em";
+                        })
+                        .attr("class", "author-attribute")
+                        .on('mouseover.tooltip', function (d) {
+                            d3.selectAll("text.name-rollover").remove();
+                            d3.selectAll('footer')
+                                    .append('text')
+                                    .attr('class', 'name-rollover')
+                                    .text(d.attribute + " conf.")
+                                    ;
+                        })
+                        .on('mouseout.tooltip', function (d) {
+                            d3.select("text.name-rollover")
+                                    .transition()
+                                    .duration(500)
+                                    .style('opacity', 0)
+                                    .remove();
+                        })
+                        .text(function (d) {
+                            return d.attribute;
+                        });
+
+
+
+            }
+            //-----------------------------------------
+            function insertMenu(root) {
+                "use strict";
+                //var json = JSON.parse(root);
+                console.log("root", root);
+                console.log("items", root.items);
+                var insert = d3.selectAll("#menu").selectAll("div");
+                var menu = insert.data(root.items).enter();
+                menu.append("div")
+                        .attr("class", "menu")
+                        .append("a")
+                        .attr("href", function (d) {
+                            return d.name + ".html";
+                        })
+                        .text(function (d) {
+                            return d.label
+                        });
+            }
+            
+            d3.json("json/menu.json", insertMenu)
+            d3.json("json/graph.json", insertAuthorNames)
+        </script>
+    </body>
+</html>
+

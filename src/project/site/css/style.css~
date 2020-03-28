@@ -1,0 +1,65 @@
+.box {
+    height: 1.1em;
+    display: table;
+    width: 400px;
+}
+
+#content {
+    float: none;
+}
+
+.menu {
+    float: left;
+    padding: 1em 2em;
+    text-decoration: none;
+    background: #111;
+}
+
+menu a{
+    background-color: #00933C;
+    color: whitesmoke;
+    padding: 0.2em;
+}
+
+a{
+    text-decoration: none;
+}
+
+body{
+    color: #111;
+    font-family: cursive
+}
+
+a{
+    color: darkolivegreen;
+}
+
+header{
+    position: absolute;
+    top: 1em;
+}
+
+footer{
+    position: absolute;
+    top: 0em;
+    font-size: small;
+}
+
+section #d3-content{
+    position: absolute;
+    top: 6em;
+    padding: 2em;
+    width: 36em;
+}
+
+.author-name{
+    font-size: small;
+    display: table-cell;
+}
+.author-attribute{
+    float: right;
+    background-color: #00933C;
+    text-align: right;
+    color: whitesmoke;
+    font-size: small;
+}

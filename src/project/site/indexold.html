@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Chat nodejs</title>
+        <link rel="stylesheet" href="style/style.css"/>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div>Bienvenue sur le chat</div>
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script>
+            //-----------------------------------------
+            // adresse regulierement ecoutee
+            var serverUrl = "http://127.0.0.1";
+            var serverPort = 8080;
+            var server = io.connect(serverUrl + ":" + serverPort);
+
+            server.on('message', function(data) {
+                document.getElementById('message').innerHTML += 'received from the server:' + data + '<br/>';
+            });
+            server.emit('ready');
+
+
+   </script>
+
+	<h1 id="message">Le serveur va envoyer un truc juste là ---> </h1>
+	<h4 id="nbclients"></h4>
+	<img src="images/node.png" alt="node"/>
+	<input type="text"/>
+	<input id="sendmsg" type="submit"/>
+    </body>
+</html>
+
