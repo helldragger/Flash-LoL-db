@@ -109,7 +109,7 @@ body{
 	content: ' ';
 	left: 5px;
 	bottom: 0;
-	border: 1px solid gray;
+	border-bottom: 1px solid gray;
 	width: 98.5%;
 	height: 45px;
 }
