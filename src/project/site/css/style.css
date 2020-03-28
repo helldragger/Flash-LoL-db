@@ -66,11 +66,6 @@ body{
 	z-index: 14;
 }
 
-.leftborder{
-	border-left: 1px solid gray;
-	padding-left: 15px; 
-}
-
 .inputsrch{
 	float: right;
 	position: relative;
