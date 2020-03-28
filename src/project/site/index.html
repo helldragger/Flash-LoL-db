@@ -23,7 +23,7 @@
         	</div>
 		</section>
 		<footer>
-			<div id="details" style="width:100%;height:800px; background-repeat: no-repeat; background-size: cover; color:#f0e68c;">
+			<div id="details" style="width:100%;height:717px; background-repeat: no-repeat; background-size: cover; background-image: url('http://localhost:8080/img/banner.png'); color:#f0e68c;">
 				<div id="details-side" style="background-color: rgba(6, 28, 37, 0.6); height:800px; width:25%; display:inline-block;">
 					<div>
 						<h3 id="details-name"></h3> <h4 id="details-title" style="text-align: right;"></h4>
@@ -69,7 +69,7 @@
 						}
 
 						d3.select("#details")
-							.style("background-image", "url('http://localhost:8080/img/champion_splash/"+root.items[i].name+"_"+random_item(root.items[i].skins).num+".jpg')")
+							.style("background-image", "url('http://localhost:8080/img/champion_splash/"+root.items[i].id+"_"+random_item(root.items[i].skins).num+".jpg')")
 						
 						d3.select("#details-name")
 							.text(root.items[i].name);
@@ -83,39 +83,39 @@
 						d3.select("#details-diff")
 							.text(root.items[i].info.difficulty);
 
-						d3.select("details-spell-0")
+						d3.select("#details-spell-0")
 							.select("img")
-							.attr("xlink:href", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[0].image.full)
+							.attr("src", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[0].image.full)
 							.attr("alt", root.items[i].spells[0].description)
 
-						d3.select("details-spell-0")
+						d3.select("#details-spell-0")
 							.select("span")
 							.text(root.items[i].spells[0].name)
 
-						d3.select("details-spell-1")
+						d3.select("#details-spell-1")
 							.select("img")
-							.attr("xlink:href", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[1].image.full)
+							.attr("src", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[1].image.full)
 							.attr("alt", root.items[i].spells[1].description)
 
-						d3.select("details-spell-1")
+						d3.select("#details-spell-1")
 							.select("span")
 							.text(root.items[i].spells[1].name)
 
-						d3.select("details-spell-2")
+						d3.select("#details-spell-2")
 							.select("img")
-							.attr("xlink:href", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[2].image.full)
+							.attr("src", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[2].image.full)
 							.attr("alt", root.items[i].spells[2].description)
 
-						d3.select("details-spell-2")
+						d3.select("#details-spell-2")
 							.select("span")
 							.text(root.items[i].spells[2].name)
 
-						d3.select("details-spell-3")
+						d3.select("#details-spell-3")
 							.select("img")
-							.attr("xlink:href", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[3].image.full)
+							.attr("src", "http://localhost:8080/img/champion_spell/"+root.items[i].spells[3].image.full)
 							.attr("alt", root.items[i].spells[3].description)
 
-						d3.select("details-spell-3")
+						d3.select("#details-spell-3")
 							.select("span")
 							.text(root.items[i].spells[3].name)
 
