@@ -20,6 +20,7 @@ library(formattable)
 require(mongolite)
 require(r2d3)
 require(extrafont)
+require(svglite)
 windowsFonts(`quadrata`=windowsFont("Friz Quadrata Std"))
 
 # Define server logic required to draw a histogram
@@ -303,20 +304,24 @@ shinyServer(function(input, output) {
     
     p = polygon %>%
       ggplot(aes(x=x, y=y))+
-      geom_polygon(data=polygons, aes(group=value),fill='transparent', color="gray70", size=0.3)+
-      annotate(geom="text", label="ATTAQUE", x=0, y=1, angle=-57,hjust=0, vjust=0, fontface="bold", color="gray65", size=7, family = annotFamily)+
-      annotate(geom="text", label="DEFENSE", x=-.86, y=-.5, angle=58, hjust=0, vjust=0, fontface="bold", color="gray65", size=7, family = annotFamily)+
-      annotate(geom="text", label="MAGIE", x=.86, y=-.5, vjust=0,hjust=1, fontface="bold", color="gray65", size=7, family = annotFamily)+
-      geom_polygon(fill='gray75', color="gray45", size=1.3)+
+      geom_polygon(data=polygons, aes(group=value),fill='transparent', color="#135d68", size=0.3)+
+      annotate(geom="text", label="ATTAQUE", x=0, y=1, angle=-57,hjust=0, vjust=0, fontface="bold", color="gray65", size=15, family = annotFamily)+
+      annotate(geom="text", label="DEFENSE", x=-.86, y=-.5, angle=58, hjust=0, vjust=0, fontface="bold", color="gray65", size=15, family = annotFamily)+
+      annotate(geom="text", label="MAGIE", x=.86, y=-.5, vjust=0,hjust=1, fontface="bold", color="gray65", size=15, family = annotFamily)+
+      geom_polygon(fill='#135d68', color="#00bcd4", size=1.3)+
       geom_segment(aes(x=0,y=0,xend=0,yend=1, color="ATTAQUE"))+
       geom_segment(aes(x=0,y=0,xend=-.86,yend=-.5, color="DÉFENSE"))+
       geom_segment(aes(x=0,y=0,xend=.86,yend=-.5, color="MAGIE"))+
-      geom_point(data=scales, aes(x=x, y=y, color=type))+
+      geom_point(data=scales, aes(x=x, y=y, color=type), size=3)+
       geom_point(aes(x=x, y=y, color=type))+
-      geom_label(aes(color=type, label=value))+
+      geom_point(aes(label=value, color=type), size=12)+
+      
+      geom_text(aes(label=value),color="white", size=7)+
       theme_void()+
       guides(color=F)
-    
+    filename = paste0("project/site/img/champion_info/",selected()$name,".svg")
+    print(filename)
+    ggsave(file=filename, plot=p, width=13, height=10)
     p
     
   }, bg="transparent")

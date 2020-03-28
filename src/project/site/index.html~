@@ -3,6 +3,7 @@
         <meta charset="UTF-8"> 
         <title>XML/NodeJS framework - Index</title>
         <script src="d3/d3.min.js"></script>
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
         <link type="text/css" href="css/style.css" rel="stylesheet"/>
     </head>
     <body>
@@ -12,45 +13,61 @@
             </menu>
         </header>
         <section id="content">
-            <div id="d3-content">
-                <p>Pr&eacute;sentation de donn&eacute;es de 
-                    bibliographie&nbsp;: des auteurs publient conjointement 
-                    &agrave; des conf&eacute;rences. </p>
-                <p>On cherche &agrave; rendre 
-                    l'information visuellement attractive.</p>
-                <p>Ce framework devrait combiner&nbsp;:</p>
-                <ul><li>une base de donn&eacute;es non traditionnelle fournissant du JSON</li>
-                    <li>un serveur Nodejs avec socket.io pour servir les données</li>
-                    <li>une visualisation de donn&eacute;es générée côté client avec D3.js</li>
-                </ul>
-                <p>Dans cette version, les données sont des fichiers JSON 
-                    statiques hébergés sur le serveur&nbsp: plus besoin de serveur
-                    Nodejs ni de gestionnaire de base de données.</p>
-            </div>
-            <div id="nconf"></div>
+        	<nav>
+        		<canvas class="canves" width="500" height="52" style="width: 500; height: 52px; left: -2px; top: -2px"></canvas>
+        	</nav>
+        	<div class="list_content">
+        	    <div class="title"></div>
+        		<div class="list_champ"></div>
+        	</div>
         </section>
         <footer>
         </footer>
 
         <script>
-            function insertMenu(root) {
+        function insertMenu(root) {
                 "use strict";
+                //var json = JSON.parse(root);
                 console.log("root", root);
                 console.log("items", root.items);
-                var insert = d3.selectAll("#menu").selectAll("div");
-                var menu = insert.data(root.items).enter();
-                menu.append("div")
-                        .attr("class", "menu")
-                        .append("a")
-                        .attr("href", function (d) {
-                            return d.name + ".html";
-                        })
-                        .text(function (d) {
-                            return d.label
-                        });
+                console.log("champion name", root.items[0].name);
+                for (let i = 0; i < root.items.length; i++){
+                	var node = document.createElement("div");
+                	
+                	var textnode = document.createElement("p");
+                	textnode.innerHTML = root.items[i].name;
+                	
+                	var effect = document.createElement("span");
+                	effect.setAttribute("class", "effect_list");
+                	
+                	var imgnode = document.createElement("img");
+                	imgnode.setAttribute("src", "img/champion_loading/"+root.items[i].id+"_0.jpg");
+                	
+                	textnode.setAttribute("class", "textChamp");
+                	
+                	imgnode.setAttribute("class", "imgChamp");
+                	
+                	node.appendChild(imgnode);
+                	node.appendChild(effect);
+                	node.appendChild(textnode);
+                	node.setAttribute("id", root.items[i].id);
+                	node.setAttribute("class", "nameChamp");
+                	document.getElementsByClassName("list_champ")[0].appendChild(node);
+                }
             }
-
-            d3.json("json/menu.json", insertMenu)
+        	//var io = require('socket.io').listen(app.listen(8080), {log: true});
+        	//var io = require('socket.io').listen(8080);
+        	var s = io.connect('http://localhost:8080');
+        	s.emit('ready', function(data){
+        			console.log(data);
+        	});
+        	var cast;
+        	s.on('data', (data) =>{
+        			console.log(data);
+        			var e = document.getElementById("menu");
+        			insertMenu(data);
+        			//e.innerHTML = data;
+        			});
         </script>
     </body>
 </html>
