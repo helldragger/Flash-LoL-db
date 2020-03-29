@@ -1,3 +1,6 @@
+
+@font-face {font-family: "BeaufortforLOL-Bold"; src: url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.eot"); src: url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.woff") format("woff"), url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/12420e8c141ca7c3dff41de2d59df13e.svg#BeaufortforLOL-Bold") format("svg"); }
+
 @font-face{
 	font-family: "font lol";
 	src: url('lol.ttf');
@@ -54,6 +57,8 @@ body{
 	mix-blend-mode: multiply;
 	transition: width 0.75s, transform 0.5s ease-in-out;
 }
+
+/* Partie I */
 
 .menuLol {
 	position: relative;
@@ -250,4 +255,88 @@ body{
 	left: calc(100% + 165px);
 	transition: 0.5s;
 	transition-delay: 0.2s;
+}
+
+
+
+/* Partie II */
+
+#details{
+	position: fixed;
+	z-index: 100;
+	background-size: 20% 20%;
+	bottom:0;
+	left:0;	
+	width:100%;
+	
+	height: 500px;
+	background: no-repeat center center;
+	background-size: 80% 100%;
+	background-image: url('http://localhost:8080/img/banner.png');
+	color:#f0e68c;
+
+}
+
+#details-side{
+	background-color: rgba(6, 28, 37, 0.6);
+	height:800px;
+	width:25%;
+	display:inline-block;
+	padding: 1em;
+}
+
+#details-center{
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	
+	height:80px;
+	width:44%;
+	display:inline-block;
+}
+
+#details-center > div{
+	font-family: "BeaufortforLOL-Bol";
+	font-style: italic;
+}
+
+#competence{
+	position: fixed;
+	bottom: 0;
+}
+
+#competence > ul{
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+}
+
+.img-border{
+	border: 2px solid #B58845;
+	border-radius: 20px;
+	transform: scale(1.1, 1.1);
+	cursor: pointer;
+	transition: border-radius 0.5s, transform 0.5s;
+}
+
+.img-border:hover{
+	border-radius: 10px;
+	transform: scale(1.2, 1.2);
+	filter: blur(0.6px);
+}
+
+.comp-bar{
+	margin-left: 30px;
+}
+
+#details-side-left{
+	position: absolute;
+	right: 0;
+	
+	background-color: rgba(6, 28, 37, 0.6);
+	height:800px;
+	width:25%;
+	display:inline-block;
+	padding: 1em;
+	
 }
