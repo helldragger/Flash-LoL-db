@@ -101,12 +101,22 @@
 					<hr/>
 					<div>
 						<h4>ATTAQUES :</h4>
-							<ul style="list-style: none;">
-								<li style="display:inline-block"><img class="img-border" style="display: inline-block; width:20px; height: 20px;"></img><span></span></li>
-								<li style="display:inline-block"><img class="img-border" style="display: inline-block; width:20px; height: 20px;"></img><span></span></li>
-								<li style="display:inline-block"><img class="img-border" style="display: inline-block; width:20px; height: 20px;"></img><span></span></li>
-							</ul>
+							<div id="stat">
+								<ul style="list-style: none;">
+									<li class="imgStat1" aria-label1="Physique"><p id="details-phy" style="display:inline-block"></p><img src="img/StatMods/StatModsAttackSpeedIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat2" aria-label2="Magique"><p id="details-mag" style="display:inline-block">0</p><img src="img/StatMods/StatModsAdaptiveForceIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat3" aria-label3="Délais"><p id="details-cd" style="display:inline-block">0%</p><img src="img/StatMods/StatModsCDRScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+								</ul>
+							</div>
+						</br>
 						<h4>DÉFENCES :</h4>
+							<div id="stat">
+								<ul style="list-style: none;">
+									<li class="imgStat1" aria-label1="Point de vie"><p id="details-hp" style="display:inline-block"></p><img src="img/StatMods/StatModsHealthScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat2" aria-label2="Armure physique"><p id="details-ar" style="display:inline-block"></p><img src="img/StatMods/StatModsArmorIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat3" aria-label3="Armure magique"><p id="details-rm" style="display:inline-block"></p><img src="img/StatMods/StatModsMagicResIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+								</ul>
+							</div>
 						<h4></h4>
 					</div>
 			</div>
@@ -230,7 +240,19 @@
 							.select("span")
 							//.text(root.items[i].spells[3].name)
 							
-
+						d3.select("#details-phy")
+							.text(root.items[i].stats.attackdamage);
+							
+						d3.select("#details-hp")
+							.text(root.items[i].stats.hp);
+							
+						d3.select("#details-ar")
+							.text(root.items[i].stats.armor);
+							
+						d3.select("#details-rm")
+							.text(root.items[i].stats.spellblock);
+							
+							
 						d3.xml("http://localhost:8080/img/champion_info/"+root.items[i].name+'.svg')
 							.then((documentFragment) => {
 								

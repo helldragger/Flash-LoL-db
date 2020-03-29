@@ -42,6 +42,7 @@ body{
 	height: 200px;
 	
 	font-family: "font lol";
+	color: #f0e68c;
 }
 
 .underline {	
@@ -232,7 +233,6 @@ body{
 .textChamp{
 	text-align: center;
 	display: block;
-	color: #F0E68C;
 	background-color: #061c25;
 	margin-top: -5px;
 	padding: 6%;
@@ -273,8 +273,7 @@ body{
 	background: no-repeat center center;
 	background-size: 80% 100%;
 	background-image: url('http://localhost:8080/img/banner.png');
-	color:#f0e68c;
-
+	border-top: 2px groove white;
 }
 
 #details-side{
@@ -339,4 +338,102 @@ body{
 	display:inline-block;
 	padding: 1em;
 	
+}
+
+#stat > ul {
+	position: relative;
+
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+#stat > ul > li > p {
+	position: relative;
+	top: -10px;
+	font-size: 20px;
+	width: 60px;
+	text-align: right;
+	margin-bottom: 0px;
+}
+
+.imgStat1:hover:after,
+.imgStat1:focus:after {
+	content: attr(aria-label1);  /* on affiche aria-label */
+	position: absolute;
+	top: -33px;
+	left: 85px;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
+	white-space: nowrap;  /* on interdit le retour à la ligne*/
+	padding: 5px 14px;
+	background: #135D68;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+[aria-label1]:hover:before,
+[aria-label1]:focus:before {
+	content: "▼";
+	position: absolute;
+	top: -13px;
+	left: 85px;
+	z-index: 1;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	font-size: 20px;
+	color: #135D68;
+}
+
+.imgStat2:hover:after,
+.imgStat2:focus:after {
+	content: attr(aria-label2);  /* on affiche aria-label */
+	position: absolute;
+	top: 5px;
+	left: 85px;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
+	white-space: nowrap;  /* on interdit le retour à la ligne*/
+	padding: 5px 14px;
+	background: #135D68;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+[aria-label2]:hover:before,
+[aria-label2]:focus:before {
+	content: "▼";
+	position: absolute;
+	top: 25px;
+	left: 85px;
+	z-index: 1;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	font-size: 20px;
+	color: #135D68;
+}
+
+.imgStat3:hover:after,
+.imgStat3:focus:after {
+	content: attr(aria-label3);  /* on affiche aria-label */
+	position: absolute;
+	top: 30px;
+	left: 85px;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
+	white-space: nowrap;  /* on interdit le retour à la ligne*/
+	padding: 5px 14px;
+	background: #135D68;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+[aria-label3]:hover:before,
+[aria-label3]:focus:before {
+	content: "▼";
+	position: absolute;
+	top: 50px;
+	left: 85px;
+	z-index: 1;
+	transform: translateX(-50%); /* on centre horizontalement  */
+	font-size: 20px;
+	color: #135D68;
 }
