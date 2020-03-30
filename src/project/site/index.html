@@ -77,7 +77,7 @@
 					<span id="details-aides"></span>
 				</div>
 				<div id="details-center">
-					<div id="boxButton" onclick="deleteFrame()"><img id="buttonStyle" src="img/upload.png" onclick="deleteFrame()"></img></div>
+					<div id="boxButton"><img id="buttonStyle" src="img/upload.png"></img></div>
 					<div>
 						<h1 id="details-name" style="padding-left: 15%;"></h1>
 						<h3 id="details-title" style="padding-left: 10%;"></h3>
@@ -85,11 +85,11 @@
 					<div id="competence">
 						<h2 id="details-title" style="padding-left: 10%;">Compétences :</h2>
 						<ul style="list-style: none;">
-							<li class="comp-bar" id="details-passif" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span></span></li>
-							<li class="comp-bar" id="details-spell-0" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span></span></li>
-							<li class="comp-bar" id="details-spell-1" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span></span></li>
-							<li class="comp-bar" id="details-spell-2" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span></span></li>
-							<li class="comp-bar" id="details-spell-3" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span></span></li>
+							<li class="comp-bar" id="details-passif" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
+							<li class="comp-bar" id="details-spell-0" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
+							<li class="comp-bar" id="details-spell-1" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
+							<li class="comp-bar" id="details-spell-2" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
+							<li class="comp-bar" id="details-spell-3" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
 						</ul>
 					</div>
 				</div>
@@ -123,24 +123,30 @@
         </footer>
 
         <script>
-        
         function deleteFrame(){
+        	console.log("delete");
+        	var boxButton = document.getElementById("boxButton");
+        	boxButton.onmouseover = ()=>{ buttonDown.style.transform="scale(0.8, 0.8) rotate(-90deg)"};
+        	boxButton.onmouseout = ()=>{ buttonDown.style.transform="scale(1, 1) rotate(-90deg)"};
+        	boxButton.setAttribute("onclick" ,"activeFrame()");
         	var frame = document.getElementById("details");
-        	frame.style.transform="translate(0%, 100%)";
+        	frame.style.transform="translate(0%, 93%)";
         	var buttonDown = document.getElementById("buttonStyle");
-        	buttonDown.style.transform="rotate(90deg)";
+        	buttonDown.style.transform="rotate(-90deg)";
         	var selectFrame = document.getElementById("content");
         	selectFrame.style.filter= "blur(0px)";
         }
         
         function activeFrame(){
+        	console.log("euh");
         	var frame = document.getElementById("details");
         	frame.style.transform="translate(0%, 0%)";
         	var buttonDown = document.getElementById("buttonStyle");
-        	buttonDown.style.transform="rotate(-90deg)";
+        	buttonDown.style.transform="rotate(90deg)";
         	var boxButton = document.getElementById("boxButton");
         	boxButton.onmouseover = ()=>{ buttonDown.style.transform="scale(0.8, 0.8) rotate(90deg)"};
-        	boxButton.onmouseout = ()=>{ buttonDown.style.transform="scale(1, 1) rotate(-90deg)"};
+        	boxButton.onmouseout = ()=>{ buttonDown.style.transform="scale(1, 1) rotate(90deg)"};
+        	boxButton.setAttribute("onclick" ,"deleteFrame()");
         	var selectFrame = document.getElementById("content");
         	selectFrame.style.filter= "blur(5px)";
         }
