@@ -85,11 +85,11 @@
 					<div id="competence">
 						<h2 id="details-title" style="padding-left: 10%;">Compétences :</h2>
 						<ul style="list-style: none;">
-							<li class="comp-bar" id="details-passif" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
-							<li class="comp-bar" id="details-spell-0" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
-							<li class="comp-bar" id="details-spell-1" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
-							<li class="comp-bar" id="details-spell-2" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
-							<li class="comp-bar" id="details-spell-3" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="test"></span></li>
+							<li class="comp-bar" id="details-passif" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="descSpell" style=" padding: 1em;"><h3 id="details-passif-name"></h3><hr><p id="details-passif-desc"></p></span></li>
+							<li class="comp-bar" id="details-spell-0" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="descSpell" style=" padding: 1em;"><h3 id="details-spell0-name"></h3><hr><p id="details-spell0-desc"></p></span></li>
+							<li class="comp-bar" id="details-spell-1" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="descSpell" style=" padding: 1em;"><h3 id="details-spell1-name"></h3><hr><p id="details-spell1-desc"></p></span></li>
+							<li class="comp-bar" id="details-spell-2" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="descSpell" style=" padding: 1em;"><h3 id="details-spell2-name"></h3><hr><p id="details-spell2-desc"></p></span></li>
+							<li class="comp-bar" id="details-spell-3" style="display:inline-block"><img class="img-border" style="display: inline-block; width:64px; height: 64px;"></img><span id="descSpell" style=" padding: 1em;"><h3 id="details-spell3-name"></h3><hr><p id="details-spell3-desc"></p></span></li>
 						</ul>
 					</div>
 				</div>
@@ -124,7 +124,6 @@
 
         <script>
         function deleteFrame(){
-        	console.log("delete");
         	var boxButton = document.getElementById("boxButton");
         	boxButton.onmouseover = ()=>{ buttonDown.style.transform="scale(0.8, 0.8) rotate(-90deg)"};
         	boxButton.onmouseout = ()=>{ buttonDown.style.transform="scale(1, 1) rotate(-90deg)"};
@@ -138,7 +137,6 @@
         }
         
         function activeFrame(){
-        	console.log("euh");
         	var frame = document.getElementById("details");
         	frame.style.transform="translate(0%, 0%)";
         	var buttonDown = document.getElementById("buttonStyle");
@@ -230,7 +228,37 @@
 						d3.select("#details-passif")
 							.select("img")
 							.attr("src", "http://localhost:8080/img/champion_passive/"+root.items[i].passive.image.full)
-							.attr("alt", root.items[i].spells[0].description)
+							.attr("alt", root.items[i].passive.description);
+						
+						d3.select("#details-passif-name")
+							.text(root.items[i].passive.name);
+							
+						d3.select("#details-passif-desc")
+							.text(root.items[i].passive.description);
+							
+						d3.select("#details-spell0-name")
+							.text(root.items[i].spells[0].name);
+							
+						d3.select("#details-spell0-desc")
+							.text(root.items[i].spells[0].description);
+							
+						d3.select("#details-spell1-name")
+							.text(root.items[i].spells[1].name);
+							
+						d3.select("#details-spell1-desc")
+							.text(root.items[i].spells[1].description);
+							
+						d3.select("#details-spell2-name")
+							.text(root.items[i].spells[2].name);
+							
+						d3.select("#details-spell2-desc")
+							.text(root.items[i].spells[2].description);
+							
+						d3.select("#details-spell3-name")
+							.text(root.items[i].spells[3].name);
+							
+						d3.select("#details-spell3-desc")
+							.text(root.items[i].spells[3].description);
 							
 						d3.select("#details-spell-0")
 							.select("img")
