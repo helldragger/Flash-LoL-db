@@ -329,6 +329,22 @@ body{
 
 }
 
+#boxSkin{
+	float: right;
+	margin-top: 20px;
+
+	border-radius: 5px 5px 5px 5px;
+	border: 2px solid #B58845;
+
+	
+	cursor: pointer;
+}
+
+#changeSkin{
+	width: 122px;
+	height: 72px;
+}
+
 #competence{
 	position: fixed;
 	bottom: 0;

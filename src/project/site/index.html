@@ -78,6 +78,7 @@
 				</div>
 				<div id="details-center">
 					<div id="boxButton"><img id="buttonStyle" src="img/upload.png"></img></div>
+					<div id="boxSkin"><img id="changeSkin" src="" alt="0" onclick=""></img></div>
 					<div>
 						<h1 id="details-name" style="padding-left: 15%;"></h1>
 						<h3 id="details-title" style="padding-left: 10%;"></h3>
@@ -123,6 +124,25 @@
         </footer>
 
         <script>
+        
+        function skinPass(idHero){
+        	var skin = document.getElementById("changeSkin");
+        	var fond = document.getElementById("details");
+        	idSkin = parseInt(skin.getAttribute("alt"));
+        	for (let i=0; i < cast.items[idHero].skins.length; i++){
+        		if (i == idSkin && idSkin+1 != cast.items[idHero].skins.length){
+        			console.log("le chiffre est", i);
+        			skin.setAttribute("alt", idSkin+1);
+        			skin.setAttribute("src", "http://localhost:8080/img/champion_splash/" + cast.items[idHero].id + "_" + cast.items[idHero].skins[i+1].num + ".jpg");
+        			document.getElementById("details").style.backgroundImage="url('http://localhost:8080/img/champion_splash/"+ cast.items[idHero].id + "_" + cast.items[idHero].skins[i].num +".jpg')";
+        			return null;
+        		}
+        	}
+        	skin.setAttribute("alt", 0);
+        	skin.setAttribute("src", "http://localhost:8080/img/champion_splash/" + cast.items[idHero].id + "_" + cast.items[idHero].skins[0].num + ".jpg");        	
+        	document.getElementById("details").style.backgroundImage="url('http://localhost:8080/img/champion_splash/"+ cast.items[idHero].id + "_" + cast.items[idHero].skins[cast.items[idHero].skins.length-1].num +".jpg')";
+        }
+        
         function deleteFrame(){
         	var boxButton = document.getElementById("boxButton");
         	boxButton.onmouseover = ()=>{ buttonDown.style.transform="scale(0.8, 0.8) rotate(-90deg)"};
@@ -165,6 +185,7 @@
         
         
         function insertMenu(root, filter) {
+        	console.log("start");
         		document.getElementsByClassName("list_champ")[0].innerHTML='';
         		postList = ["All","Assassin","Fighter","Mage","Marksman","Support","Tank"];
         		
@@ -190,7 +211,7 @@
 						}
 
 						d3.select("#details")
-							.style("background-image", "url('http://localhost:8080/img/champion_splash/"+root.items[i].id+"_0.jpg')")
+							.style("background-image", "url('http://localhost:8080/img/champion_splash/"+root.items[i].id+"_0.jpg')");
 							//.style("background-image", "url('http://localhost:8080/img/champion_splash/"+root.items[i].id+"_"+random_item(root.items[i].skins).num+".jpg')")
 						
 						d3.select("#details-name")
@@ -222,9 +243,15 @@
 							nbHelp=Math.floor(Math.random()*root.items[i].enemytips.length);
 							infoHelp="Contre : " + root.items[i].enemytips[nbHelp];
 						}
+						
 						d3.select("#details-aides")
 							.text(infoHelp);
 							
+						d3.select("#changeSkin")
+							.attr("onclick", "skinPass("+i+")")
+							.attr("alt", "1")
+							.attr("src", "http://localhost:8080/img/champion_splash/" + root.items[i].id + "_" + root.items[i].skins[1].num + ".jpg");
+						
 						d3.select("#details-passif")
 							.select("img")
 							.attr("src", "http://localhost:8080/img/champion_passive/"+root.items[i].passive.image.full)
