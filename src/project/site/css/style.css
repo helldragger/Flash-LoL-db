@@ -333,25 +333,31 @@ body{
 	float: right;
 	margin-top: 20px;
 
-	border-radius: 5px 5px 5px 5px;
+	border-radius: 15px 15px 15px 15px;
 	border: 2px solid #B58845;
 
-	
+	opacity: 40%;
 	cursor: pointer;
+	transition: border-radius 0.2s, transform 0.2s, opacity 0.2s;
+}
+
+#boxSkin:hover{
+	opacity:100%;
+	border-radius: 5px 5px 5px 5px;
+	transform: scale(1.2,1.2);
+	transition: border-radius 0.5s, transform 0.5s, opacity 0.5s ease-in;
+
 }
 
 #changeSkin{
 	width: 122px;
 	height: 72px;
-	opacity: 35%;
-	transition-property: opacity;
-	transition-duration: 200ms;
+	border-radius: 15px 15px 15px 15px;
+	transition: border-radius 0.5s;
 }
+
 #changeSkin:hover{
-	opacity:100%;
-	transition-property: opacity;
-	transition-duration: 300ms;
-	transition-timing-function: ease-in;
+	border-radius: 5px 5px 5px 5px;
 }
 
 #competence{
