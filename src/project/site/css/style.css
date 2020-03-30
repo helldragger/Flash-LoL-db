@@ -343,6 +343,15 @@ body{
 #changeSkin{
 	width: 122px;
 	height: 72px;
+	opacity: 35%;
+	transition-property: opacity;
+	transition-duration: 200ms;
+}
+#changeSkin:hover{
+	opacity:100%;
+	transition-property: opacity;
+	transition-duration: 300ms;
+	transition-timing-function: ease-in;
 }
 
 #competence{
