@@ -142,6 +142,8 @@ body{
 	padding: 20px 0;
 	background-color: #d9d9d9;
 	box-sizing: border-box;
+	border-radius: 5px;
+
 }
 
 .list_content:before{
@@ -279,6 +281,7 @@ body{
 	transition: transform 2s, background 1.25s;
 	
 	box-shadow: inset -310px -15px 25px 10px #061c25, inset 310px 30px 25px 10px #061c25;
+	overflow: hidden;
 }
 
 #details-side{
@@ -331,6 +334,9 @@ body{
 
 #boxSkin{
 	float: right;
+	position: relative;
+	transform: translateY(600%);
+	
 	margin-top: 20px;
 
 	border-radius: 15px 15px 15px 15px;
@@ -344,7 +350,7 @@ body{
 #boxSkin:hover{
 	opacity:100%;
 	border-radius: 5px 5px 5px 5px;
-	transform: scale(1.2,1.2);
+	transform: scale(1.2,1.2) translateY(500%);
 	transition: border-radius 0.5s, transform 0.5s, opacity 0.5s ease-in;
 
 }
@@ -358,6 +364,19 @@ body{
 
 #changeSkin:hover{
 	border-radius: 5px 5px 5px 5px;
+}
+
+#svgEmbed{
+	position: absolute;
+	margin-left:20px;
+	width:500px;
+	height:390px;
+	display:inline-block;
+	background: rgba(6, 28, 37, 0.8);
+	padding: 1em;
+	border-radius: 15px;
+	transform: translateY(-102%);
+	transition: transform 2s;
 }
 
 #competence{
@@ -428,7 +447,6 @@ body{
 
 #stat > ul {
 	position: relative;
-
 	margin-left: auto;
 	margin-right: auto;
 	width: 50%;
@@ -441,85 +459,19 @@ body{
 	width: 60px;
 	text-align: right;
 	margin-bottom: 0px;
+	
 }
 
-.imgStat1:hover:after,
-.imgStat1:focus:after {
-	content: attr(aria-label1);  /* on affiche aria-label */
+.imgStat:hover:after,
+.imgStat:focus:after {
+	content: attr(aria-label);  /* on affiche aria-label */
 	position: absolute;
-	top: -33px;
-	left: 85px;
-	transform: translateX(-50%); /* on centre horizontalement  */
+	transform: translateX(0%) translateY(18%); /* on centre horizontalement  */
 	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
 	white-space: nowrap;  /* on interdit le retour à la ligne*/
 	padding: 5px 14px;
-	background: rgba(6, 28, 37, 0.8);
 	border-radius: 4px;
 	font-size: 16px;
-}
-
-[aria-label1]:hover:before,
-[aria-label1]:focus:before {
-	content: "▼";
-	position: absolute;
-	top: -13px;
-	left: 85px;
-	z-index: 1;
-	transform: translateX(-50%); /* on centre horizontalement  */
-	font-size: 20px;
-	color: #061c25;
-}
-
-.imgStat2:hover:after,
-.imgStat2:focus:after {
-	content: attr(aria-label2);  /* on affiche aria-label */
-	position: absolute;
-	top: 5px;
-	left: 85px;
-	transform: translateX(-50%); /* on centre horizontalement  */
-	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
-	white-space: nowrap;  /* on interdit le retour à la ligne*/
-	padding: 5px 14px;
-	background: #135D68;
-	border-radius: 4px;
-	font-size: 16px;
-}
-
-[aria-label2]:hover:before,
-[aria-label2]:focus:before {
-	content: "▼";
-	position: absolute;
-	top: 25px;
-	left: 85px;
-	z-index: 1;
-	transform: translateX(-50%); /* on centre horizontalement  */
-	font-size: 20px;
-	color: #135D68;
-}
-
-.imgStat3:hover:after,
-.imgStat3:focus:after {
-	content: attr(aria-label3);  /* on affiche aria-label */
-	position: absolute;
-	top: 30px;
-	left: 85px;
-	transform: translateX(-50%); /* on centre horizontalement  */
-	z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
-	white-space: nowrap;  /* on interdit le retour à la ligne*/
-	padding: 5px 14px;
-	background: #135D68;
-	border-radius: 4px;
-	font-size: 16px;
-}
-
-[aria-label3]:hover:before,
-[aria-label3]:focus:before {
-	content: "▼";
-	position: absolute;
-	top: 50px;
-	left: 85px;
-	z-index: 1;
-	transform: translateX(-50%); /* on centre horizontalement  */
-	font-size: 20px;
-	color: #135D68;
+	text-align: left;
+	width: 100px;
 }

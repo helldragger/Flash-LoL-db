@@ -69,9 +69,7 @@
 					<br/>
 					<br/>
 					Difficulté : <span id="details-diff"></span>
-					<h5 style="text-align: right; display: inline-block; font-style: italic; cursor: pointer;">(en savoir plus...)</h5>
-					<br/>
-					<br/>
+					<h5 style="text-align: right; display: inline-block; font-style: italic;"></h5><p id="svgStat" style="text-align: right; transform: translateY(-200%); cursor: pointer;" onmouseover="printStat()" onmouseout="deleteStat()">(en savoir plus...)</p>
 					<hr/>
 					<h3 style="text-align: center">Aides</h3>
 					<span id="details-aides"></span>
@@ -94,7 +92,7 @@
 						</ul>
 					</div>
 				</div>
-				<div id="svgEmbed" style="width:500px; height:500px; margin:auto; display:inline-block;"><svg></svg></div>
+				<div id="svgEmbed"><svg></svg></div>
 				<div id="details-side-left">
 					<div>
 						<h3 style="text-align: center">Statistiques</h3>
@@ -104,18 +102,18 @@
 						<h4>ATTAQUES :</h4>
 							<div id="stat">
 								<ul style="list-style: none;">
-									<li class="imgStat1" aria-label1="Physique"><p id="details-phy" style="display:inline-block"></p><img src="img/StatMods/StatModsAttackSpeedIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
-									<li class="imgStat2" aria-label2="Magique"><p id="details-mag" style="display:inline-block">0</p><img src="img/StatMods/StatModsAdaptiveForceIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
-									<li class="imgStat3" aria-label3="Délais"><p id="details-cd" style="display:inline-block">0%</p><img src="img/StatMods/StatModsCDRScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Physique"><p id="details-phy" style="display:inline-block"></p><img src="img/StatMods/StatModsAttackSpeedIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Magique"><p id="details-mag" style="display:inline-block">0</p><img src="img/StatMods/StatModsAdaptiveForceIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Délais"><p id="details-cd" style="display:inline-block">0%</p><img src="img/StatMods/StatModsCDRScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
 								</ul>
 							</div>
 						</br>
 						<h4>DÉFENSES :</h4>
 							<div id="stat">
 								<ul style="list-style: none;">
-									<li class="imgStat1" aria-label1="Point de vie"><p id="details-hp" style="display:inline-block"></p><img src="img/StatMods/StatModsHealthScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
-									<li class="imgStat2" aria-label2="Armure physique"><p id="details-ar" style="display:inline-block"></p><img src="img/StatMods/StatModsArmorIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
-									<li class="imgStat3" aria-label3="Armure magique"><p id="details-rm" style="display:inline-block"></p><img src="img/StatMods/StatModsMagicResIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Point de vie"><p id="details-hp" style="display:inline-block"></p><img src="img/StatMods/StatModsHealthScalingIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Armure physique"><p id="details-ar" style="display:inline-block"></p><img src="img/StatMods/StatModsArmorIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
+									<li class="imgStat" aria-label="Armure magique"><p id="details-rm" style="display:inline-block"></p><img src="img/StatMods/StatModsMagicResIcon.png" style="display: inline-block; width:30px; height: 30px;"></img><span></span></li>
 								</ul>
 							</div>
 					</div>
@@ -125,13 +123,22 @@
 
         <script>
         
+        function printStat(){
+        	var node = document.getElementById("svgEmbed");
+        	node.style.transform = "translateY(9%)";
+        }
+        
+        function deleteStat(){
+        	var node = document.getElementById("svgEmbed");
+        	node.style.transform = "translateY(-102%)";
+        }
+        
         function skinPass(idHero){
         	var skin = document.getElementById("changeSkin");
         	var fond = document.getElementById("details");
         	idSkin = parseInt(skin.getAttribute("alt"));
         	for (let i=0; i < cast.items[idHero].skins.length; i++){
         		if (i == idSkin && idSkin+1 != cast.items[idHero].skins.length){
-        			console.log("le chiffre est", i);
         			skin.setAttribute("alt", idSkin+1);
         			skin.setAttribute("src", "http://localhost:8080/img/champion_splash/" + cast.items[idHero].id + "_" + cast.items[idHero].skins[i+1].num + ".jpg");
         			document.getElementById("details").style.backgroundImage="url('http://localhost:8080/img/champion_splash/"+ cast.items[idHero].id + "_" + cast.items[idHero].skins[i].num +".jpg')";
@@ -185,7 +192,6 @@
         
         
         function insertMenu(root, filter) {
-        	console.log("start");
         		document.getElementsByClassName("list_champ")[0].innerHTML='';
         		postList = ["All","Assassin","Fighter","Mage","Marksman","Support","Tank"];
         		
