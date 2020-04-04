@@ -27,11 +27,11 @@ header:before{
 	background: url('../img/fond.png') center center;
 	background-size: 100% 100%;
 	filter: blur(5px);
-	box-shadow: inset 0px -30px 25px 10px #061c25;
+	box-shadow: inset 0px -30px 25px 10px #040f1d;
 }
 
 body{
-    background: #061c25 no-repeat center center;
+    background: #040f1d no-repeat center center;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: -10px;
@@ -237,7 +237,7 @@ body{
 .textChamp{
 	text-align: center;
 	display: block;
-	background-color: #061c25;
+	background-color: #040f1d;
 	margin-top: -5px;
 	padding: 6%;
 	transition: transform 0.5s, margin-top 0.4s, background-color 0.2s;
@@ -280,14 +280,14 @@ body{
 	transform: translate(0%, 100%);
 	transition: transform 2s, background 1.25s;
 	
-	box-shadow: inset -310px -60px 25px 10px #061c25, inset 310px 60px 25px 10px #061c25;
+	box-shadow: inset -310px -60px 25px 10px #040f1d, inset 310px 60px 25px 10px #040f1d;
 	overflow: hidden;
 }
 
 #details-side{
 	background-color: rgba(6, 28, 37, 0.6);
 	height:800px;
-	width:25%;
+	width:22.9%;
 	display:inline-block;
 	padding: 1.5em;
 }
@@ -305,6 +305,7 @@ body{
 #details-center > div{
 	font-family: "BeaufortforLOL-Bol";
 	font-style: italic;
+	text-shadow: 0px 0px 10px #040f1d;
 }
 
 #boxButton{
@@ -340,7 +341,6 @@ body{
 	margin-top: 20px;
 	border-radius: 15px 15px 15px 15px;
 	border: 2px solid #B58845;
-	margin-right:20px;
 	opacity: 40%;
 	cursor: pointer;
 	transition: border-radius 0.2s, transform 0.2s, opacity 0.2s;
@@ -426,8 +426,8 @@ body{
 #descSpell:after{
 	content: "▼";
 	position: absolute;
-	top: 220px;
-	transform: translateX(470%) rotate(-126deg);
+	top: 224px;
+	transform: translateX(435%);/* rotate(-126deg);*/
 	font-size: 30px;
 	color: #061c25;
 	opacity: 0.8;
@@ -438,7 +438,7 @@ body{
 	right: 0;
 	background-color: rgba(6, 28, 37, 0.6);
 	height:800px;
-	width:25%;
+	width:22.9%;
 	display:inline-block;
 	padding: 1.5em;
 	
