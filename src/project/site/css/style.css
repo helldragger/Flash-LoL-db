@@ -375,7 +375,9 @@ body{
 	padding: 1em;
 	border-radius: 15px;
 	transform: translateY(-102%);
-	transition: transform 2s;
+	transition: transform .8s;
+	transition-duration: .8s;
+	transition-timing-function: ease;
 }
 
 #competence{
