@@ -340,7 +340,7 @@ body{
 	margin-top: 20px;
 	border-radius: 15px 15px 15px 15px;
 	border: 2px solid #B58845;
-
+	margin-right:20px;
 	opacity: 40%;
 	cursor: pointer;
 	transition: border-radius 0.2s, transform 0.2s, opacity 0.2s;
