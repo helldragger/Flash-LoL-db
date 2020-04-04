@@ -335,10 +335,9 @@ body{
 #boxSkin{
 	float: right;
 	position: relative;
-	transform: translateY(600%);
+	transform: translateY(860%);
 	
 	margin-top: 20px;
-
 	border-radius: 15px 15px 15px 15px;
 	border: 2px solid #B58845;
 
@@ -350,7 +349,7 @@ body{
 #boxSkin:hover{
 	opacity:100%;
 	border-radius: 5px 5px 5px 5px;
-	transform: scale(1.2,1.2) translateY(500%);
+	transform: scale(1.2,1.2) translateY(720%); 
 	transition: border-radius 0.5s, transform 0.5s, opacity 0.5s ease-in;
 
 }
